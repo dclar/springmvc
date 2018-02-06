@@ -17,6 +17,7 @@
         <module>solr</module>
         <module>elasticsearch</module>
         <module>kafka</module>
+        <module>zookeeper</module>
     </modules>
     <name>springmvc Maven Webapp</name>
     <url>http://maven.apache.org</url>
