@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- override these for application-specific URLs if you like: -->
+
+        <property name="loginUrl" value="/signin"/>
+        <property name="successUrl" value="/home"/>
+        <property name="unauthorizedUrl" value="/signin"/>
+
+        <!-- The 'filters' property is not necessary since any declared javax.servlet.Filter bean  -->
+        <!-- defined will be automatically acquired and available via its beanName in chain        -->
+        <!-- definitions, but you can perform instance overrides or name aliases here if you like: -->
+        <!-- <property name="filters">
+            <util:map>
+                <entry key="anAlias" value-ref="someFilter"/>
+            </util:map>
+        </property> -->
+        <property name="filterChainDefinitions">
+            <value>
+                # some example chain definitions:
+                /signin/** = anon
+                /download/** = anon
+                /home/** = authc
+                #roles[admin]
+
+                #/home/** = authc, perms[document:read]
+
+                # more URL-to-FilterChain definitions here
+                ######################################################################################################
+                # 这里有个注意事项
+                # 页面的css, js等需要进行anon的过滤，否则页面无法显示css效果，js全部被隔离
+                # 并且，配置顺序也需要考虑，如果先配置 /** = authc 则后面配置的anon无效，所以anon的配置应该优先在前面
+                # First Win see: https://shiro.apache.org/web.html
+                ######################################################################################################
+                /resources/** = anon
+                /** = authc
+
+            </value>
+        </property>
+    </bean>
+
+    <!-- Define any javax.servlet.Filter beans you want anywhere in this application context.   -->
+    <!-- They will automatically be acquired by the 'shiroFilter' bean above and made available -->
+    <!-- to the 'filterChainDefinitions' property.  Or you can manually/explicitly add them     -->
+    <!-- to the shiroFilter's 'filters' Map if desired. See its JavaDoc for more details.       -->
+    <!-- 这里可以声明客户端的Filter，作为filterChainDefinitions参数-->
+    <!--
+    <bean id="someFilter" class="..."/>
+    <bean id="anotherFilter" class="...">
+
+    </bean>
+    ...
+    -->
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
+
+        <property name="realms">
+            <set>
+                <ref bean="identifyRealm"/>
+                <!--<ref bean="loginRealm"/>-->
+            </set>
+        </property>
+
+        <!-- By default the servlet container sessions will be used.  Uncomment this line
+             to use shiro's native sessions (see the JavaDoc for more): -->
+        <!-- <property name="sessionMode" value="native"/> -->
+    </bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- Define the Shiro Realm implementation you want to use to connect to your back-end -->
+    <!-- security datasource: -->
+
+    <bean id="identifyRealm" class="org.dclar.shiro.realm.auth.IdentifyRealmImpl">
+        <property name="credentialsMatcher" ref="identifyCredentialsMatcher"/>
+    </bean>
+    <!--<bean id="loginRealm" class="shiro.realm.auth.LoginRealmImpl"/>-->
+
+    <bean id="identifyCredentialsMatcher" class="org.dclar.shiro.matcher.IdentifyCredentialsMatcher"/>
+
+</beans>
