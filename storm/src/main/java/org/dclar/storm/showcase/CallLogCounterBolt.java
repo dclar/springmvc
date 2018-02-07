@@ -6,6 +6,7 @@ import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
+import org.dclar.storm.showcase.util.LogUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class CallLogCounterBolt implements IRichBolt {
         }
 
         System.out.println("Bout CallLogCounterBolt : execute() " + call + "-" + duration);
+        LogUtil.log(this, "Bout CallLogCounterBolt : execute() " + call + "-" + duration);
         // 通知Spout已经处理完毕
         collector.ack(tuple);
     }
@@ -46,6 +48,7 @@ public class CallLogCounterBolt implements IRichBolt {
     public void cleanup() {
         for (Map.Entry<String, Integer> entry : counterMap.entrySet()) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
+            LogUtil.log(this, entry.getKey() + " : " + entry.getValue());
         }
     }
 

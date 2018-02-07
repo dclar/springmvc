@@ -7,6 +7,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.dclar.storm.showcase.util.LogUtil;
 
 import java.util.Map;
 
@@ -29,6 +30,7 @@ public class CallLogCreatorBolt implements IRichBolt {
     public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
         System.out.println("Bout CallLogCreatorBolt : prepare()");
+        LogUtil.log(this, "Bout CallLogCreatorBolt : prepare()");
     }
 
     /**
@@ -49,6 +51,7 @@ public class CallLogCreatorBolt implements IRichBolt {
         // 进行了format处理
         collector.emit(new Values(from + " - " + to, duration));
         System.out.println("Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
+        LogUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
     }
 
     @Override

@@ -1,13 +1,9 @@
 package org.dclar.storm.showcase;
 
 import org.apache.storm.Config;
-import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -15,14 +11,15 @@ import java.util.Map;
  */
 public class App {
 
+
     public static void main(String[] args) throws Exception {
 
         //Create Config instance for cluster configuration
         Config config = new Config();
 
         // 设置zookeeper
-        Map<String,String> map = new HashMap<>();
-        map.put("storm.zookeeper.servers","centos01");
+//        Map<String, String> map = new HashMap<>();
+//        map.put("storm.zookeeper.servers", "centos01");
 
         config.setDebug(true);
 
@@ -62,19 +59,23 @@ public class App {
         builder.setBolt("call-log-counter-bolt", new
                 CallLogCounterBolt()).fieldsGrouping("call-log-creator-bolt", new Fields("call"));
 
+/*
         // 本地集群伪分布方式
-         LocalCluster cluster = new LocalCluster();
-         cluster.submitTopology("LogAnalyserStorm", config, builder.createTopology());
+        LocalCluster cluster = new LocalCluster();
+        cluster.submitTopology("LogAnalyserStorm", config, builder.createTopology());
         Thread.sleep(10000);
         //Stop the topology
 
         cluster.shutdown();
+*/
 
-
-        /*
         // 集群的提交方式
         StormSubmitter.submitTopology("StormAPP", config, builder.createTopology());
-        */
+
+
+
+        Thread.sleep(30000);
+
     }
 
 

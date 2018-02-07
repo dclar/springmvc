@@ -6,6 +6,7 @@ import org.apache.storm.topology.IRichSpout;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
+import org.dclar.storm.showcase.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,11 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     private Random randomGenerator = new Random();
     private Integer idx = 0;
 
+
+//    public FakeCallLogReaderSpout() {
+//        LogUtil.log(this, "FakeCallLogReaderSpout new()");
+//    }
+
     /**
      * 生命周期初始化
      *
@@ -42,6 +48,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
         this.context = context;
         this.collector = collector;
         System.out.println("Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        LogUtil.log(this, "Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
     /**
@@ -50,7 +57,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
      */
     @Override
     public void nextTuple() {
-        if (this.idx <= 1000) {
+        if (this.idx <= 10) {
 
             // fake telephones
             List<String> mobileNumbers = new ArrayList<String>();
@@ -72,6 +79,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
                 this.collector.emit(new Values(fromMobileNumber, toMobileNumber, duration));
 
                 System.out.println("spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
+                LogUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
             }
         }
     }
@@ -94,6 +102,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     public void close() {
 
         System.out.println("Spout.closed : closed!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        LogUtil.log(this, "Spout.closed : closed!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
     public boolean isDistributed() {
