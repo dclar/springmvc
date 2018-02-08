@@ -22,6 +22,7 @@ public class CallLogCounterBolt implements IRichBolt {
     public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
         this.counterMap = new HashMap<String, Integer>();
         this.collector = collector;
+        MyUtil.log(this, "Bout CallLogCounterBolt : prepare()");
     }
 
     @Override

@@ -75,7 +75,7 @@ public class MyUtil {
 
             String oinfo = oclass + "@" + hash + addSpace(12 - String.valueOf(hash).length());
 
-            String prefix = "[" + time + " " + host + " " + pid + " " + tinfo + " " + oinfo + "]" + " " + msg + addSpace(23 - msg.length()) + "\n";
+            String prefix = "[" + time + " " + host + " " + "进程:" + pid + " " + tinfo + " " + oinfo + "]" + " " + msg + addSpace(23 - msg.length()) + "\n";
 
             os.write(prefix.getBytes());
             os.flush();
