@@ -26,7 +26,7 @@ public class App {
         TopologyBuilder builder = new TopologyBuilder();
 
         // 设置spout
-        builder.setSpout("call-log-reader-spout", new FakeCallLogReaderSpout(),1);
+        builder.setSpout("call-log-reader-spout", new FakeCallLogReaderSpout(), 1);
         // 并发度为1⬆
 
 
@@ -58,14 +58,15 @@ public class App {
         // 设置bolt
         builder.setBolt("call-log-creator-bolt", new
                 // CallLogCreatorBolt(),3).shuffleGrouping("call-log-reader-spout");
-                CallLogCreatorBolt(),3).fieldsGrouping("call-log-reader-spout", new Fields("from"));
+                // CallLogCreatorBolt(),3).fieldsGrouping("call-log-reader-spout", new Fields("from"));
+                CallLogCreatorBolt(), 3).allGrouping("call-log-reader-spout");
         // 并发度为4 ⬆
 
 
         // 设置bolt
 
         builder.setBolt("call-log-counter-bolt", new
-                CallLogCounterBolt(),5).fieldsGrouping("call-log-creator-bolt", new Fields("call"));
+                CallLogCounterBolt(), 5).fieldsGrouping("call-log-creator-bolt", new Fields("call"));
         // 并发度为4 ⬆
 
 /*
@@ -80,7 +81,6 @@ public class App {
 
         // 集群的提交方式
         StormSubmitter.submitTopology("StormAPP", config, builder.createTopology());
-
 
 
         Thread.sleep(30000);
