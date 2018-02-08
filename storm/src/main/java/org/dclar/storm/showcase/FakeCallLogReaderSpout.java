@@ -40,6 +40,8 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     // 使用zookeeper托管idx后,成员变量废弃
     // private Integer idx = 0;
 
+    private int index = 0;
+
 //    public FakeCallLogReaderSpout() {
 //
 //
@@ -67,8 +69,8 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     @Override
     public void nextTuple() {
 
-        int idx = getIndexFromZK();
-        if (idx <= 40) {
+        // int idx = getIndexFromZK();
+        if (index < 10) {
 
             // fake telephones
             List<String> mobileNumbers = new ArrayList<String>();
@@ -79,8 +81,11 @@ public class FakeCallLogReaderSpout implements IRichSpout {
 
             MyUtil.log(this, "prepared Telephones ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-            Integer localIdx = 0;
-            while (localIdx++ < 100 && idx++ < 1000) {
+            //Integer localIdx = 0;
+
+            // while (localIdx++ < 100 && idx++ < 1000) {
+            // 目的为产生10条记录
+            for (; index < 10; index++) {
                 String fromMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
                 String toMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
 
@@ -89,11 +94,11 @@ public class FakeCallLogReaderSpout implements IRichSpout {
                 }
 
                 Integer duration = randomGenerator.nextInt(60);
-                this.collector.emit(new Values(idx, fromMobileNumber, toMobileNumber, duration));
+                this.collector.emit(new Values(index, fromMobileNumber, toMobileNumber, duration));
 
                 System.out.println("spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
                 //MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
-                MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration + "spout ------> " + idx);
+                MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration + "spout ------> " + index);
             }
         }
     }
