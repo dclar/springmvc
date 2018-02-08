@@ -57,7 +57,8 @@ public class App {
          */
         // 设置bolt
         builder.setBolt("call-log-creator-bolt", new
-                CallLogCreatorBolt(),3).shuffleGrouping("call-log-reader-spout");
+                // CallLogCreatorBolt(),3).shuffleGrouping("call-log-reader-spout");
+                CallLogCreatorBolt(),3).fieldsGrouping("call-log-reader-spout", new Fields("from"));
         // 并发度为4 ⬆
 
 

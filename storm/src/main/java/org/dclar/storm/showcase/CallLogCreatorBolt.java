@@ -61,7 +61,7 @@ public class CallLogCreatorBolt implements IRichBolt {
 
         System.out.println("Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
         // MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
-        MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration + "----------------> " + index);
+        MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration + "----------------> " + index + ": " + from);
     }
 
     @Override
