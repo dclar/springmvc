@@ -1,11 +1,13 @@
 package org.dclar.storm.showcase.util;
 
+import org.apache.storm.shade.org.apache.zookeeper.*;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,7 +16,7 @@ import java.util.Date;
  *
  * @author dclar
  */
-public class LogUtil {
+public class MyUtil {
 
     private static OutputStream os;
 
@@ -91,6 +93,24 @@ public class LogUtil {
 
     }
 
+    /**
+     * 初始化zk的idx的值为0
+     *
+     * @throws IOException
+     * @throws KeeperException
+     * @throws InterruptedException
+     */
+    @Test
+    public void initZKindex() throws IOException, KeeperException, InterruptedException {
+        ZooKeeper zooKeeper = new ZooKeeper("centos01:2181", 1000, new Watcher() {
+            @Override
+            public void process(WatchedEvent event) {
+            }
+        });
+
+        zooKeeper.create("/index", MyUtil.int2Bytes(0), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+
+    }
 
     public static String addSpace(int n) {
         String str = "";
@@ -98,5 +118,19 @@ public class LogUtil {
             str = str + " ";
         }
         return str;
+    }
+
+
+    public static byte[] int2Bytes(int i) {
+        byte[] arr = new byte[4];
+        arr[0] = (byte) (i >>> 24);
+        arr[1] = (byte) (i >>> 16);
+        arr[2] = (byte) (i >>> 8);
+        arr[3] = (byte) (i >>> 0);
+        return arr;
+    }
+
+    public static int bytes2int(byte[] bytes) {
+        return bytes[0] << 24 | bytes[1] << 16 | bytes[8] | bytes[3];
     }
 }

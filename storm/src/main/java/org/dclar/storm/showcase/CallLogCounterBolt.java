@@ -6,7 +6,7 @@ import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
-import org.dclar.storm.showcase.util.LogUtil;
+import org.dclar.storm.showcase.util.MyUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +27,15 @@ public class CallLogCounterBolt implements IRichBolt {
     @Override
     public void execute(Tuple tuple) {
         // from to
-        String call = tuple.getString(0);
+        // String call = tuple.getString(0);
+        int index = tuple.getInteger(0);
+
+        String call = tuple.getString(1);
+
         // 通话时长
-        Integer duration = tuple.getInteger(1);
+        // Integer duration = tuple.getInteger(1);
+        Integer duration = tuple.getInteger(2);
+
         // 进行通话计数
         if (!counterMap.containsKey(call)) {
             counterMap.put(call, 1);
@@ -39,7 +45,8 @@ public class CallLogCounterBolt implements IRichBolt {
         }
 
         System.out.println("Bout CallLogCounterBolt : execute() " + call + "-" + duration);
-        LogUtil.log(this, "Bout CallLogCounterBolt : execute() " + call + "-" + duration);
+        // MyUtil.log(this, "Bout CallLogCounterBolt : execute() " + call + "-" + duration);
+        MyUtil.log(this, "Bout CallLogCounterBolt : execute() =====================>  " + index);
         // 通知Spout已经处理完毕
         collector.ack(tuple);
     }
@@ -48,7 +55,7 @@ public class CallLogCounterBolt implements IRichBolt {
     public void cleanup() {
         for (Map.Entry<String, Integer> entry : counterMap.entrySet()) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
-            LogUtil.log(this, entry.getKey() + " : " + entry.getValue());
+            MyUtil.log(this, entry.getKey() + " : " + entry.getValue());
         }
     }
 

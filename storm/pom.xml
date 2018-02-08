@@ -24,8 +24,26 @@
             <artifactId>storm-core</artifactId>
         </dependency>
 
+        <!--##########################################################################-->
+        <!--#                                                                        #-->
+        <!--#   Zookeeper                                                            #-->
+        <!--#   尽量使用storm自带的zookeeper 便于集群的运行                              #-->
+        <!--##########################################################################-->
+        <!-- https://mvnrepository.com/artifact/org.apache.storm/storm-core -->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.zookeeper</groupId>-->
+            <!--<artifactId>zookeeper</artifactId>-->
+        <!--</dependency>-->
 
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

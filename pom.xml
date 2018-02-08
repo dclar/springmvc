@@ -14,7 +14,6 @@
         <module>storm</module>
         <module>hbase</module>
         <module>mongoDB</module>
-        <module>solr</module>
         <module>elasticsearch</module>
         <module>kafka</module>
         <module>zookeeper</module>
@@ -50,6 +49,8 @@
         <org.dclar.excel2html>1.0-SNAPSHOT</org.dclar.excel2html>
         <org.apache.storm>1.1.1</org.apache.storm>
 
+        <org.apache.zookeeper>3.4.6</org.apache.zookeeper>
+
     </properties>
 
     <!--采用dependencyManagement的方式-->
@@ -74,14 +75,14 @@
                         <groupId>org.hamcrest</groupId>
                     </exclusion>
                 </exclusions>
-                <scope>test</scope>
+                <!--<scope>test</scope>-->
             </dependency>
 
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-core</artifactId>
                 <version>${hamcrest.core.version}</version>
-                <scope>test</scope>
+                <!--<scope>test</scope>-->
             </dependency>
 
             <dependency>
@@ -301,6 +302,18 @@
                 <groupId>org.apache.storm</groupId>
                 <artifactId>storm-core</artifactId>
                 <version>${org.apache.storm}</version>
+            </dependency>
+
+            <!--##########################################################################-->
+            <!--#                                                                        #-->
+            <!--#   Zookeeper                                                            #-->
+            <!--#                                                                        #-->
+            <!--##########################################################################-->
+            <!-- https://mvnrepository.com/artifact/org.apache.storm/storm-core -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${org.apache.zookeeper}</version>
             </dependency>
 
 

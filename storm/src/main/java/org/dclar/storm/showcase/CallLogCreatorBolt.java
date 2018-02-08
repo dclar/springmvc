@@ -7,7 +7,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.dclar.storm.showcase.util.LogUtil;
+import org.dclar.storm.showcase.util.MyUtil;
 
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class CallLogCreatorBolt implements IRichBolt {
     public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
         System.out.println("Bout CallLogCreatorBolt : prepare()");
-        LogUtil.log(this, "Bout CallLogCreatorBolt : prepare()");
+        MyUtil.log(this, "Bout CallLogCreatorBolt : prepare()");
     }
 
     /**
@@ -42,16 +42,26 @@ public class CallLogCreatorBolt implements IRichBolt {
     public void execute(Tuple tuple) {
 
         // 接收电话主叫
-        String from = tuple.getString(0);
+        // String from = tuple.getString(0);
+        // 获得zk托管的idx
+        int index = tuple.getInteger(0);
+
+        // 接收电话主叫
+        String from = tuple.getString(1);
 
         // 接收被叫
-        String to = tuple.getString(1);
-        Integer duration = tuple.getInteger(2);
+        // String to = tuple.getString(1);
+        String to = tuple.getString(2);
+        //Integer duration = tuple.getInteger(2);
+        Integer duration = tuple.getInteger(3);
 
         // 进行了format处理
-        collector.emit(new Values(from + " - " + to, duration));
+        // collector.emit(new Values(from + " - " + to, duration));
+        collector.emit(new Values(index, from + " - " + to, duration));
+
         System.out.println("Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
-        LogUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
+        // MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
+        MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration + "----------------> " + index);
     }
 
     @Override
@@ -66,7 +76,8 @@ public class CallLogCreatorBolt implements IRichBolt {
      */
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("call", "duration"));
+        //declarer.declare(new Fields("call", "duration"));
+        declarer.declare(new Fields("index", "call", "duration"));
     }
 
     @Override

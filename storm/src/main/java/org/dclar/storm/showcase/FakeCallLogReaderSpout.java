@@ -1,13 +1,20 @@
 package org.dclar.storm.showcase;
 
+import org.apache.storm.shade.com.google.common.annotations.VisibleForTesting;
+import org.apache.storm.shade.org.apache.zookeeper.WatchedEvent;
+import org.apache.storm.shade.org.apache.zookeeper.Watcher;
+import org.apache.storm.shade.org.apache.zookeeper.ZooKeeper;
+import org.apache.storm.shade.org.apache.zookeeper.data.Stat;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.IRichSpout;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
-import org.dclar.storm.showcase.util.LogUtil;
+import org.dclar.storm.showcase.util.MyUtil;
+import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +36,13 @@ public class FakeCallLogReaderSpout implements IRichSpout {
 
     //Create instance for Random class.
     private Random randomGenerator = new Random();
-    private Integer idx = 0;
 
+    // 使用zookeeper托管idx后,成员变量废弃
+    // private Integer idx = 0;
 
 //    public FakeCallLogReaderSpout() {
-//        LogUtil.log(this, "FakeCallLogReaderSpout new()");
+//
+//
 //    }
 
     /**
@@ -48,7 +57,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
         this.context = context;
         this.collector = collector;
         System.out.println("Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        LogUtil.log(this, "Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        MyUtil.log(this, "Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
     /**
@@ -57,7 +66,9 @@ public class FakeCallLogReaderSpout implements IRichSpout {
      */
     @Override
     public void nextTuple() {
-        if (this.idx <= 10) {
+
+        int idx = getIndexFromZK();
+        if (idx <= 40) {
 
             // fake telephones
             List<String> mobileNumbers = new ArrayList<String>();
@@ -66,8 +77,10 @@ public class FakeCallLogReaderSpout implements IRichSpout {
             mobileNumbers.add("1234123403");
             mobileNumbers.add("1234123404");
 
+            MyUtil.log(this, "prepared Telephones ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
             Integer localIdx = 0;
-            while (localIdx++ < 100 && this.idx++ < 1000) {
+            while (localIdx++ < 100 && idx++ < 1000) {
                 String fromMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
                 String toMobileNumber = mobileNumbers.get(randomGenerator.nextInt(4));
 
@@ -76,10 +89,11 @@ public class FakeCallLogReaderSpout implements IRichSpout {
                 }
 
                 Integer duration = randomGenerator.nextInt(60);
-                this.collector.emit(new Values(fromMobileNumber, toMobileNumber, duration));
+                this.collector.emit(new Values(idx, fromMobileNumber, toMobileNumber, duration));
 
                 System.out.println("spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
-                LogUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
+                //MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
+                MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration + "spout ------> " + idx);
             }
         }
     }
@@ -91,7 +105,8 @@ public class FakeCallLogReaderSpout implements IRichSpout {
      */
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("from", "to", "duration"));
+        // idx托管给zookeeper后,声明的schema中加入index
+        declarer.declare(new Fields("index", "from", "to", "duration"));
     }
 
     /**
@@ -102,7 +117,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     public void close() {
 
         System.out.println("Spout.closed : closed!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        LogUtil.log(this, "Spout.closed : closed!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        MyUtil.log(this, "Spout.closed : closed!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
     public boolean isDistributed() {
@@ -139,4 +154,40 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     public Map<String, Object> getComponentConfiguration() {
         return null;
     }
+
+
+    /**
+     * 使用zk管理idx 每次娶到idx时自动 + 1操作 涉及到bytes与int的相互转换
+     *
+     * @return
+     */
+    public int getIndexFromZK() {
+
+        // 由于zookeeper无法进行串行化的调用,每一次获取一个新的zookeeper来进行处理
+        ZooKeeper zooKeeper = null;
+        try {
+            zooKeeper = new ZooKeeper("centos01:2181", 1000, new Watcher() {
+                @Override
+                public void process(WatchedEvent event) {
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Stat stat = new Stat();
+            byte[] bytes = zooKeeper.getData("/index", null, stat);
+            int i = MyUtil.bytes2int(bytes);
+            zooKeeper.setData("/index", MyUtil.int2Bytes(i + 1), stat.getVersion());
+
+            return i;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
 }
