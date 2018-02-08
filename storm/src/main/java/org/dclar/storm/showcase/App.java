@@ -59,7 +59,8 @@ public class App {
         builder.setBolt("call-log-creator-bolt", new
                 // CallLogCreatorBolt(),3).shuffleGrouping("call-log-reader-spout");
                 // CallLogCreatorBolt(),3).fieldsGrouping("call-log-reader-spout", new Fields("from"));
-                CallLogCreatorBolt(), 3).allGrouping("call-log-reader-spout");
+                // CallLogCreatorBolt(), 3).allGrouping("call-log-reader-spout");
+                CallLogCreatorBolt(), 3).directGrouping("call-log-reader-spout");
         // 并发度为4 ⬆
 
 

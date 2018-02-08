@@ -42,6 +42,8 @@ public class FakeCallLogReaderSpout implements IRichSpout {
 
     private int index = 0;
 
+    private List<Integer> ids;
+
 //    public FakeCallLogReaderSpout() {
 //
 //
@@ -58,6 +60,9 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
         this.context = context;
         this.collector = collector;
+
+        ids = context.getComponentTasks("call-log-creator-boltl");
+
         System.out.println("Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         MyUtil.log(this, "Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
@@ -94,7 +99,15 @@ public class FakeCallLogReaderSpout implements IRichSpout {
                 }
 
                 Integer duration = randomGenerator.nextInt(60);
-                this.collector.emit(new Values(index, fromMobileNumber, toMobileNumber, duration));
+                // this.collector.emit(new Values(index, fromMobileNumber, toMobileNumber, duration));
+
+                while (true) {
+                    int id = ids.get(new Random().nextInt(3));
+                    if (id % 2 == 0) {
+                        this.collector.emitDirect(id, new Values(index, fromMobileNumber, toMobileNumber, duration));
+                        break;
+                    }
+                }
 
                 System.out.println("spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
                 //MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
