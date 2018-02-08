@@ -61,7 +61,12 @@ public class FakeCallLogReaderSpout implements IRichSpout {
         this.context = context;
         this.collector = collector;
 
-        ids = context.getComponentTasks("call-log-creator-boltl");
+        ids = context.getComponentTasks("call-log-creator-bolt");
+
+        ids.forEach(s -> {
+            MyUtil.log(this, "ids ````````````````````````` >>>>>>>>> " + s.toString());
+        });
+
 
         System.out.println("Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         MyUtil.log(this, "Spout.open : opened!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -125,6 +130,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         // idx托管给zookeeper后,声明的schema中加入index
         declarer.declare(new Fields("index", "from", "to", "duration"));
+
     }
 
     /**
