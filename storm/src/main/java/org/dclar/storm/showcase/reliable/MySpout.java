@@ -42,6 +42,14 @@ public class MySpout implements IRichSpout {
 
     private Map<Integer, String> toSend = new HashMap<>();
 
+    private Map<Integer, String> allMessage = new HashMap<>();
+
+    // 失败消息 id + 次数
+    private Map<Integer, Integer> failMessage = new HashMap<>();
+
+    // 最大的重试次数
+    private static int MAX_RETRY = 5;
+
 
     /**
      * 生命周期初始化
@@ -58,6 +66,7 @@ public class MySpout implements IRichSpout {
         for (int i = 0; i < 10; i++) {
             // 初始化消息集合
             toSend.put(i, "" + i + ",tom" + i + "," + (10 + i));
+            allMessage.put(i, "" + i + ",tom" + i + "," + (10 + i));
         }
     }
 
@@ -127,6 +136,13 @@ public class MySpout implements IRichSpout {
      */
     @Override
     public void ack(Object msgId) {
+
+        // 在bolt中ack tuple后 此处可以收到msgId
+        Integer index = (Integer)msgId;
+        // 发送队列删除
+        toSend.remove(index);
+        // 失败队列删除
+        failMessage.remove(index);
     }
 
     /**
@@ -136,6 +152,22 @@ public class MySpout implements IRichSpout {
      */
     @Override
     public void fail(Object msgId) {
+
+        Integer index = (Integer) msgId;
+
+        Integer count = failMessage.get(index);
+
+        count = count == null ? 0 : count;
+
+        // 判断消息失败额次数
+        if (count < MAX_RETRY) {
+            failMessage.put(index, count + 1);
+            toSend.put(index, allMessage.get(index));
+        } else {
+            // 到达最大重试值
+            MyUtil.log(this, "msg: " + index + "has been reached max retries");
+            toSend.remove(index);
+        }
     }
 
     @Override

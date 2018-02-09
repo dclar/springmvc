@@ -48,9 +48,11 @@ public class MyBolt implements IRichBolt {
         // 模拟偶尔出现失败的场景
         if (new Random().nextBoolean()) {
             // 通知OK
+            MyUtil.log(this, msg + ": ack()");
             collector.ack(tuple);
         } else {
             // 通知失败
+            MyUtil.log(this, msg + ": fail()");
             collector.fail(tuple);
         }
 
