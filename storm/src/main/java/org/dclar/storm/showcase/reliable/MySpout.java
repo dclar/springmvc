@@ -63,11 +63,17 @@ public class MySpout implements IRichSpout {
         this.context = context;
         this.collector = collector;
 
+        // map线程安全的解决
+        toSend = Collections.synchronizedMap(toSend);
+        failMessage = Collections.synchronizedMap(failMessage);
+
         for (int i = 0; i < 10; i++) {
             // 初始化消息集合
             toSend.put(i, "" + i + ",tom" + i + "," + (10 + i));
             allMessage.put(i, "" + i + ",tom" + i + "," + (10 + i));
         }
+
+
     }
 
 
