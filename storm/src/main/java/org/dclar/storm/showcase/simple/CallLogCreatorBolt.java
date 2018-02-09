@@ -1,4 +1,4 @@
-package org.dclar.storm.showcase;
+package org.dclar.storm.showcase.simple;
 
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -29,8 +29,8 @@ public class CallLogCreatorBolt implements IRichBolt {
     @Override
     public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
-        System.out.println("Bout CallLogCreatorBolt : prepare()");
-        MyUtil.log(this, "Bout CallLogCreatorBolt : prepare()");
+        System.out.println("Bout MyBolt : prepare()");
+        MyUtil.log(this, "Bout MyBolt : prepare()");
     }
 
     /**
@@ -59,14 +59,14 @@ public class CallLogCreatorBolt implements IRichBolt {
         // collector.emit(new Values(from + " - " + to, duration));
         collector.emit(new Values(index, from + " - " + to, duration));
 
-        System.out.println("Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
-        // MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration);
-        MyUtil.log(this, "Bout CallLogCreatorBolt : execute() " + from + "-" + to + "-" + duration + "----------------> " + index + ": " + from);
+        System.out.println("Bout MyBolt : execute() " + from + "-" + to + "-" + duration);
+        // MyUtil.log(this, "Bout MyBolt : execute() " + from + "-" + to + "-" + duration);
+        MyUtil.log(this, "Bout MyBolt : execute() " + from + "-" + to + "-" + duration + "----------------> " + index + ": " + from);
     }
 
     @Override
     public void cleanup() {
-        System.out.println("Bout CallLogCreatorBolt : cleanup()");
+        System.out.println("Bout MyBolt : cleanup()");
     }
 
     /**

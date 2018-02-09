@@ -1,4 +1,4 @@
-package org.dclar.storm.showcase;
+package org.dclar.storm.showcase.simple;
 
 import org.apache.storm.shade.com.google.common.annotations.VisibleForTesting;
 import org.apache.storm.shade.org.apache.zookeeper.WatchedEvent;

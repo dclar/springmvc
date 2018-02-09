@@ -1,9 +1,13 @@
-package org.dclar.storm.showcase;
+package org.dclar.storm.showcase.reliable;
 
 import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.tuple.Fields;
+import org.dclar.storm.showcase.simple.MySpout;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -18,15 +22,15 @@ public class App {
         Config config = new Config();
 
         // 设置zookeeper
-//        Map<String, String> map = new HashMap<>();
-//        map.put("storm.zookeeper.servers", "centos01");
+        Map<String, String> map = new HashMap<>();
+        map.put("storm.zookeeper.servers", "centos01");
 
         config.setDebug(true);
 
         TopologyBuilder builder = new TopologyBuilder();
 
         // 设置spout
-        builder.setSpout("call-log-reader-spout", new FakeCallLogReaderSpout(), 1);
+        builder.setSpout("my-spout", new MySpout(), 1);
         // 并发度为1⬆
 
 
@@ -56,21 +60,11 @@ public class App {
         used to send signals to bolts. All grouping is useful for join operations.
          */
         // 设置bolt
-        builder.setBolt("call-log-creator-bolt", new
-                // CallLogCreatorBolt(),3).shuffleGrouping("call-log-reader-spout");
-                // CallLogCreatorBolt(),3).fieldsGrouping("call-log-reader-spout", new Fields("from"));
-                // CallLogCreatorBolt(), 3).allGrouping("call-log-reader-spout");
-                CallLogCreatorBolt(), 3).directGrouping("call-log-reader-spout");
+        builder.setBolt("my-bolt",
+                new MyBolt(), 3).shuffleGrouping("my-spout");
         // 并发度为4 ⬆
 
 
-        // 设置bolt
-
-        builder.setBolt("call-log-counter-bolt", new
-                CallLogCounterBolt(), 5).fieldsGrouping("call-log-creator-bolt", new Fields("call"));
-        // 并发度为4 ⬆
-
-/*
         // 本地集群伪分布方式
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("LogAnalyserStorm", config, builder.createTopology());
@@ -78,11 +72,11 @@ public class App {
         //Stop the topology
 
         cluster.shutdown();
-*/
 
+        /*
         // 集群的提交方式
-        StormSubmitter.submitTopology("StormAPP", config, builder.createTopology());
-
+        StormSubmitter.submitTopology("myAPP", config, builder.createTopology());
+*/
 
         Thread.sleep(30000);
 

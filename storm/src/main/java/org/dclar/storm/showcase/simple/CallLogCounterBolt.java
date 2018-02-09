@@ -1,4 +1,4 @@
-package org.dclar.storm.showcase;
+package org.dclar.storm.showcase.simple;
 
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
