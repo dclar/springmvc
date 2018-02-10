@@ -17,6 +17,7 @@
         <module>elasticsearch</module>
         <module>kafka</module>
         <module>zookeeper</module>
+        <module>nclogger</module>
     </modules>
     <name>springmvc Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -47,9 +48,12 @@
 
         <org.dclar.html2excel>1.0-SNAPSHOT</org.dclar.html2excel>
         <org.dclar.excel2html>1.0-SNAPSHOT</org.dclar.excel2html>
+        <org.dclar.nclogger>1.0-SNAPSHOT</org.dclar.nclogger>
         <org.apache.storm>1.1.1</org.apache.storm>
 
         <org.apache.zookeeper>3.4.6</org.apache.zookeeper>
+
+        <org.apache.httpcomponents>4.5.3</org.apache.httpcomponents>
 
     </properties>
 
@@ -75,14 +79,14 @@
                         <groupId>org.hamcrest</groupId>
                     </exclusion>
                 </exclusions>
-                <!--<scope>test</scope>-->
+                <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-core</artifactId>
                 <version>${hamcrest.core.version}</version>
-                <!--<scope>test</scope>-->
+                <scope>test</scope>
             </dependency>
 
             <dependency>
@@ -91,7 +95,6 @@
                 <version>${hamcrest.core.version}</version>
                 <scope>test</scope>
             </dependency>
-
 
 
             <dependency>
@@ -158,9 +161,9 @@
 
             <!--模版引擎-->
             <!--<dependency>-->
-                <!--<groupId>org.thymeleaf</groupId>-->
-                <!--<artifactId>thymeleaf</artifactId>-->
-                <!--<version>${thymeleaf.version}</version>-->
+            <!--<groupId>org.thymeleaf</groupId>-->
+            <!--<artifactId>thymeleaf</artifactId>-->
+            <!--<version>${thymeleaf.version}</version>-->
             <!--</dependency>-->
 
             <dependency>
@@ -217,7 +220,6 @@
                 <artifactId>shiro-spring</artifactId>
                 <version>${shiro.version}</version>
             </dependency>
-
 
 
             <!-- 添加druid连接池包 -->
@@ -317,9 +319,6 @@
             </dependency>
 
 
-
-
-
             <!--###########################################################################-->
             <!--#                                                                         #-->
             <!--#   Develop                                                               #-->
@@ -337,6 +336,12 @@
                 <artifactId>excel2html</artifactId>
                 <version>${org.dclar.excel2html}</version>
             </dependency>
+            <dependency>
+                <groupId>org.dclar</groupId>
+                <artifactId>nclogger</artifactId>
+                <version>${org.dclar.nclogger}</version>
+            </dependency>
+
 
             <!--###########################################################################-->
             <!--#                                                                         #-->
@@ -360,6 +365,11 @@
                 <version>${commons.fils.upload}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${org.apache.httpcomponents}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -369,17 +379,16 @@
         <finalName>springmvc</finalName>
 
 
-
         <!--如果mybatis的xml与Mapper的java放在一个文件夹，如果打包则需要下面的filter设置成false，否则xml会被过滤掉-->
         <!--如果不想设置以下的解决方法则使用/resource 目录中的结构和src/main/java中的目录结构一致，则打包可以在同一个文件夹-->
         <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>src/main/java</directory>-->
-                <!--<includes>-->
-                    <!--<include>**/*.xml</include>-->
-                <!--</includes>-->
-                <!--<filtering>false</filtering>-->
-            <!--</resource>-->
+        <!--<resource>-->
+        <!--<directory>src/main/java</directory>-->
+        <!--<includes>-->
+        <!--<include>**/*.xml</include>-->
+        <!--</includes>-->
+        <!--<filtering>false</filtering>-->
+        <!--</resource>-->
         <!--</resources>-->
 
 

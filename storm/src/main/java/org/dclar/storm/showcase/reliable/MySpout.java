@@ -12,7 +12,6 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.dclar.storm.showcase.util.MyUtil;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.*;

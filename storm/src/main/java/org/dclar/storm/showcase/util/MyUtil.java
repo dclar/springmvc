@@ -1,13 +1,19 @@
 package org.dclar.storm.showcase.util;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.storm.shade.org.apache.zookeeper.*;
-import org.junit.Test;
+import org.dclar.storm.showcase.util.entity.ProcessEntity;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.InetAddress;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,34 +24,19 @@ import java.util.Date;
  */
 public class MyUtil {
 
-    private static OutputStream os;
-
-
-    static Runtime r = Runtime.getRuntime();
-
-    static {
-
-        try {
-            Process p = r.exec("nc 192.168.1.100 80");
-            os = p.getOutputStream();
-        } catch (
-                IOException e)
-
-        {
-            e.printStackTrace();
-        }
-
-    }
-
 
     public static void main(String[] args) throws IOException {
 
-        //log(null,null);
+
+        for (int i = 0; i < 10; i++) {
+            log(new MyUtil(), "test" + i);
+        }
+
 
     }
 
-    //
-    public static void log(Object object, String msg) {
+
+    public static ProcessEntity getEntity(Object object, String msg) {
 
         // 系统时间
         Date date = new Date();
@@ -75,21 +66,63 @@ public class MyUtil {
 
             String oinfo = oclass + "@" + hash + addSpace(12 - String.valueOf(hash).length());
 
-            String prefix = "[" + time + " " + host + " " + "进程:" + pid + " " + tinfo + " " + oinfo + "]" + " " + msg + addSpace(23 - msg.length()) + "\n";
 
-            os.write(prefix.getBytes());
-            os.flush();
+            return new ProcessEntity(time, host.toString(), pid, tinfo, oinfo, msg);
 
-            //os.close();
-        } catch (IOException e) {
+        } catch (
+                Exception e)
+
+        {
             e.printStackTrace();
         }
-//
-//
-//        for (int i = 0; i < 100; i++) {
-//            os.write(("hello world " + i + " \n").getBytes());
-//        }
 
+        return null;
+
+    }
+
+
+    //
+    public static void log(Object object, String msg) {
+
+        HttpClientContext context = HttpClientContext.create();
+        ProcessEntity processEntity = getEntity(object, msg);
+
+        BasicCookieStore cookieStore = new BasicCookieStore();
+
+        HttpClient client = HttpClientBuilder.create().setDefaultCookieStore(cookieStore).build();
+
+        //final HttpGet request = new HttpGet("http://www.github.com");
+
+        String time = processEntity.getTime();
+        String host = processEntity.getHost();
+        String pid = processEntity.getPid();
+        String tinfo = processEntity.getTinfo();
+        String oinfo = processEntity.getOinfo();
+
+
+        StringBuffer stringBuffer = new StringBuffer();
+
+        try {
+            stringBuffer.append("time=");
+            stringBuffer.append(URLEncoder.encode(time, "utf-8")).append("&");
+            stringBuffer.append("host=");
+            stringBuffer.append(URLEncoder.encode(host, "utf-8")).append("&");
+            stringBuffer.append("pid=");
+            stringBuffer.append(URLEncoder.encode(pid, "utf-8")).append("&");
+            stringBuffer.append("tinfo=");
+            stringBuffer.append(URLEncoder.encode(tinfo, "utf-8")).append("&");
+            stringBuffer.append("oinfo=");
+            stringBuffer.append(URLEncoder.encode(oinfo, "utf-8")).append("&");
+            stringBuffer.append("msg=");
+            stringBuffer.append(URLEncoder.encode(msg, "utf-8"));
+
+            HttpPost post = new HttpPost("http://192.168.1.100:8080/log/write?" + stringBuffer.toString());
+
+
+            client.execute(post, context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -100,7 +133,6 @@ public class MyUtil {
      * @throws KeeperException
      * @throws InterruptedException
      */
-    @Test
     public void initZKindex() throws IOException, KeeperException, InterruptedException {
         ZooKeeper zooKeeper = new ZooKeeper("centos01:2181", 1000, new Watcher() {
             @Override

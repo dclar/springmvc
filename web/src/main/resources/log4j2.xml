@@ -27,7 +27,7 @@
 		<!--过滤掉spring和mybatis的一些无用的DEBUG信息 -->
 		<logger name="org.springframework" level="ERROR"/>
 		<!--<logger name="org.mybatis" level="INFO"></logger>-->
-		<root level="DEBUG">
+		<root level="ERROR">
 			<appender-ref ref="Console"/>
 		</root>
 	</loggers>

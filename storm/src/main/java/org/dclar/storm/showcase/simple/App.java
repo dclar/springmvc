@@ -1,9 +1,13 @@
 package org.dclar.storm.showcase.simple;
 
 import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -20,13 +24,15 @@ public class App {
         // 设置zookeeper
 //        Map<String, String> map = new HashMap<>();
 //        map.put("storm.zookeeper.servers", "centos01");
-
+//
+//
+        config.setNumWorkers(2);
         config.setDebug(true);
 
         TopologyBuilder builder = new TopologyBuilder();
 
         // 设置spout
-        builder.setSpout("call-log-reader-spout", new FakeCallLogReaderSpout(), 1);
+        builder.setSpout("call-log-reader-spout", new FakeCallLogReaderSpout(), 2).setNumTasks(3);
         // 并发度为1⬆
 
 
@@ -60,14 +66,14 @@ public class App {
                 // CallLogCreatorBolt(),3).shuffleGrouping("call-log-reader-spout");
                 // CallLogCreatorBolt(),3).fieldsGrouping("call-log-reader-spout", new Fields("from"));
                 // CallLogCreatorBolt(), 3).allGrouping("call-log-reader-spout");
-                CallLogCreatorBolt(), 3).directGrouping("call-log-reader-spout");
+                CallLogCreatorBolt(), 4).shuffleGrouping("call-log-reader-spout").setNumTasks(4);
         // 并发度为4 ⬆
 
 
         // 设置bolt
 
         builder.setBolt("call-log-counter-bolt", new
-                CallLogCounterBolt(), 5).fieldsGrouping("call-log-creator-bolt", new Fields("call"));
+                CallLogCounterBolt(), 4).fieldsGrouping("call-log-creator-bolt", new Fields("call")).setNumTasks(4);
         // 并发度为4 ⬆
 
 /*

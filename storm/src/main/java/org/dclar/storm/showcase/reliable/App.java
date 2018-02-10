@@ -64,7 +64,7 @@ public class App {
                 new MyBolt(), 3).shuffleGrouping("my-spout");
         // 并发度为4 ⬆
 
-
+/*
         // 本地集群伪分布方式
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("LogAnalyserStorm", config, builder.createTopology());
@@ -73,10 +73,10 @@ public class App {
 
         cluster.shutdown();
 
-        /*
+        */
         // 集群的提交方式
         StormSubmitter.submitTopology("myAPP", config, builder.createTopology());
-*/
+
 
         Thread.sleep(30000);
 

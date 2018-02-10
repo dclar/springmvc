@@ -12,7 +12,6 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.dclar.storm.showcase.util.MyUtil;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -104,15 +103,15 @@ public class FakeCallLogReaderSpout implements IRichSpout {
                 }
 
                 Integer duration = randomGenerator.nextInt(60);
-                // this.collector.emit(new Values(index, fromMobileNumber, toMobileNumber, duration));
+                this.collector.emit(new Values(index, fromMobileNumber, toMobileNumber, duration));
 
-                while (true) {
-                    int id = ids.get(new Random().nextInt(3));
-                    if (id % 2 == 0) {
-                        this.collector.emitDirect(id, new Values(index, fromMobileNumber, toMobileNumber, duration));
-                        break;
-                    }
-                }
+//                while (true) {
+//                    int id = ids.get(new Random().nextInt(3));
+//                    if (id % 2 == 0) {
+//                        this.collector.emitDirect(id, new Values(index, fromMobileNumber, toMobileNumber, duration));
+//                        break;
+//                    }
+//                }
 
                 System.out.println("spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
                 //MyUtil.log(this, "spout.emit : " + fromMobileNumber + ", " + toMobileNumber + ", " + duration);
