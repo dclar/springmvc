@@ -1,22 +1,20 @@
 package org.dclar.zookeeper.showcase.util;
 
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.WatchedEvent;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Write2zk {
 
     public static void main(String[] args) throws Exception {
-        go("/flume/foo", "/opt/hadoop-2.9.0/app/apache-flume-1.8.0-bin/conf/flume-avro.conf");
+        go("/flume/foo", "/Users/yl/opt/flume-avro.conf");
     }
 
 
-    public static void go(String path, String writeFilePath) throws IOException, KeeperException, InterruptedException {
+    public static void go(String path, String writeFilePath) throws Exception {
 
         String conn = "centos01:2181,centos02:2181,centos03:2181";
         ZooKeeper zooKeeper = new ZooKeeper(conn, 50000, new Watcher() {
@@ -26,7 +24,27 @@ public class Write2zk {
             }
         });
         Stat stat = new Stat();
-        zooKeeper.getData(path, false, stat);
+
+        try {
+            zooKeeper.getData(path, false, stat);
+        } catch (KeeperException.NoNodeException e) {
+
+            if (path.startsWith("/")) {
+
+                String[] arrPath = path.split("/");
+
+                StringBuffer addedPath = new StringBuffer();
+                for (String s : arrPath) {
+                    if (s != null && s.trim().length() != 0) {
+                        addedPath.append("/").append(s);
+                        zooKeeper.create(addedPath.toString(), new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+
+                    }
+                }
+            } else {
+                throw new Exception("path格式有误");
+            }
+        }
         //zooKeeper.getData("/flume/foo", false, stat);
 
         int v = stat.getVersion();
@@ -35,6 +53,10 @@ public class Write2zk {
         fis.read(data);
         fis.close();
         zooKeeper.setData(path, data, v);
+    }
+
+    public static void createNode() {
+
     }
 
 }
