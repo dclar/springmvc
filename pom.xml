@@ -18,6 +18,7 @@
         <module>kafka</module>
         <module>zookeeper</module>
         <module>nclogger</module>
+        <module>flume</module>
     </modules>
     <name>springmvc Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -52,6 +53,8 @@
         <org.apache.storm>1.1.1</org.apache.storm>
 
         <org.apache.zookeeper>3.4.6</org.apache.zookeeper>
+
+        <org.apache.flume>1.8.0</org.apache.flume>
 
         <org.apache.httpcomponents>4.5.3</org.apache.httpcomponents>
 
@@ -305,6 +308,20 @@
                 <artifactId>storm-core</artifactId>
                 <version>${org.apache.storm}</version>
             </dependency>
+
+            <!--##########################################################################-->
+            <!--#                                                                        #-->
+            <!--#   Flume                                                                #-->
+            <!--#                                                                        #-->
+            <!--##########################################################################-->
+            <!-- https://mvnrepository.com/artifact/org.apache.storm/storm-core -->
+            <dependency>
+                <groupId>org.apache.flume</groupId>
+                <artifactId>flume-ng-core</artifactId>
+                <version>${org.apache.flume}</version>
+            </dependency>
+
+
 
             <!--##########################################################################-->
             <!--#                                                                        #-->
