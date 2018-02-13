@@ -1,8 +1,11 @@
 package org.dclar.flume.showcase.custom;
 
+import org.apache.flume.Context;
 import org.apache.flume.Event;
+import org.apache.flume.FlumeException;
 import org.apache.flume.channel.ChannelProcessor;
 import org.apache.flume.event.SimpleEvent;
+import org.apache.flume.source.AbstractEventDrivenSource;
 import org.apache.flume.source.AbstractSource;
 
 import java.util.HashMap;
@@ -11,12 +14,17 @@ import java.util.Map;
 /**
  * 自定义source,连续发送10W的event的source
  */
-public class CustomeSource extends AbstractSource {
+public class CustomeSource extends AbstractEventDrivenSource {
 
 
-    public synchronized void start() {
+    @Override
+    protected void doConfigure(Context context) throws FlumeException {
 
-        super.start();
+    }
+
+    @Override
+    protected void doStart() throws FlumeException {
+
         ChannelProcessor cp = this.getChannelProcessor();
         Map<String, String> map = new HashMap<>();
 
@@ -28,8 +36,14 @@ public class CustomeSource extends AbstractSource {
             e = new SimpleEvent();
             e.setBody(("tom" + i).getBytes());
             e.setHeaders(map);
+            cp.processEvent(e);
         }
-        cp.processEvent(e);
+
+    }
+
+    @Override
+    protected void doStop() throws FlumeException {
+
     }
 
 }
