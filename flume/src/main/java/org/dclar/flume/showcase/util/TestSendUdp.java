@@ -1,4 +1,4 @@
-package org.dclar.flume.showcase.sendudp;
+package org.dclar.flume.showcase.util;
 
 import org.junit.Test;
 

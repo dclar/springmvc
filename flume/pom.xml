@@ -33,4 +33,10 @@
 
 
     </dependencies>
+
+    <build>
+
+        <finalName>flume</finalName>
+
+    </build>
 </project>
