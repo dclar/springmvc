@@ -320,6 +320,16 @@
                 <artifactId>flume-ng-core</artifactId>
                 <version>${org.apache.flume}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.flume.flume-ng-sinks</groupId>
+                <artifactId>flume-hdfs-sink</artifactId>
+                <version>${org.apache.flume}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flume.flume-ng-channels</groupId>
+                <artifactId>flume-jdbc-channel</artifactId>
+                <version>${org.apache.flume}</version>
+            </dependency>
 
 
 
