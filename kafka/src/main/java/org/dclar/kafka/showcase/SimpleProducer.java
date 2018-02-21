@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import java.util.Properties;
 
 public class SimpleProducer {
-    private static KafkaProducer<Integer, String> producer;
+    private static KafkaProducer<String, String> producer;
     private final Properties props = new Properties();
 
     public SimpleProducer() {
@@ -55,9 +55,9 @@ public class SimpleProducer {
         // Deprecated
         //KeyedMessage<Integer, String> data = new KeyedMessage<Integer, String>(topic, messageStr);
         // ProducerRecord<Integer, String> data = new ProducerRecord<>(topic, messageStr);
-        ProducerRecord<Integer, String> data = new ProducerRecord<>("test3", "hello world from mac idea");
+        for (int i = 0; i < 100; i++)
+            producer.send(new ProducerRecord<>("test3", Integer.toString(i), "hello from ma idea " + i));
 
-        producer.send(data);
         producer.close();
     }
 }
