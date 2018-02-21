@@ -1,7 +1,9 @@
 package org.dclar.kafka.showcase;
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 
 import java.util.Properties;
 
@@ -58,9 +60,15 @@ public class SimpleProducer {
         // Deprecated
         //KeyedMessage<Integer, String> data = new KeyedMessage<Integer, String>(topic, messageStr);
         // ProducerRecord<Integer, String> data = new ProducerRecord<>(topic, messageStr);
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 100; i++) {
             producer.send(new ProducerRecord<>("test3", Integer.toString(i), "hello from ma idea with SimplePartitioner " + i));
 
+            /* 如果需要ack的反馈结果 可以在send的时候使用callback函数
+            producer.send(new ProducerRecord<>("test3", Integer.toString(i),
+                    "hello from ma idea with SimplePartitioner " + i),
+                    (metadata, exception) -> System.out.println("ack"));
+            */
+        }
         producer.close();
 
         System.out.println("over");
