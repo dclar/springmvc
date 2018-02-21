@@ -41,6 +41,9 @@ public class SimpleProducer {
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
+        // 指定自定义的partition
+        props.put("partitioner.class", "org.dclar.kafka.showcase.SimplePartitioner");
+
         // This property instructs the Kafka broker to send an acknowledgment to the producer when a message is received.
         // By default, the producer works in the "fire and forget" mode and is not informed in case of message loss.
         props.put("request.required.acks", "1");
@@ -56,8 +59,10 @@ public class SimpleProducer {
         //KeyedMessage<Integer, String> data = new KeyedMessage<Integer, String>(topic, messageStr);
         // ProducerRecord<Integer, String> data = new ProducerRecord<>(topic, messageStr);
         for (int i = 0; i < 100; i++)
-            producer.send(new ProducerRecord<>("test3", Integer.toString(i), "hello from ma idea " + i));
+            producer.send(new ProducerRecord<>("test3", Integer.toString(i), "hello from ma idea with SimplePartitioner " + i));
 
         producer.close();
+
+        System.out.println("over");
     }
 }
