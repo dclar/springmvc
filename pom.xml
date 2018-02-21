@@ -58,6 +58,8 @@
 
         <org.apache.httpcomponents>4.5.3</org.apache.httpcomponents>
 
+        <org.apache.kafka>1.0.0</org.apache.kafka>
+
     </properties>
 
     <!--采用dependencyManagement的方式-->
@@ -330,6 +332,24 @@
                 <artifactId>flume-jdbc-channel</artifactId>
                 <version>${org.apache.flume}</version>
             </dependency>
+
+            <!--##########################################################################-->
+            <!--#                                                                        #-->
+            <!--#   kafka                                                                #-->
+            <!--#                                                                        #-->
+            <!--##########################################################################-->
+            <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${org.apache.kafka}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka_2.12</artifactId>
+                <version>${org.apache.kafka}</version>
+            </dependency>
+
 
 
 
