@@ -332,6 +332,12 @@
                 <artifactId>flume-jdbc-channel</artifactId>
                 <version>${org.apache.flume}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.flume.flume-ng-sources/flume-kafka-source -->
+            <dependency>
+                <groupId>org.apache.flume.flume-ng-sources</groupId>
+                <artifactId>flume-kafka-source</artifactId>
+                <version>${org.apache.flume}</version>
+            </dependency>
 
             <!--##########################################################################-->
             <!--#                                                                        #-->
@@ -349,6 +355,7 @@
                 <artifactId>kafka_2.12</artifactId>
                 <version>${org.apache.kafka}</version>
             </dependency>
+
 
 
 

@@ -46,6 +46,11 @@ public class SimpleProducer {
         // 指定自定义的partition
         props.put("partitioner.class", "org.dclar.kafka.showcase.SimplePartitioner");
 
+        // 异步 速度会快
+        props.put("producer.type", "async");
+        // 同步 速度会慢
+        // props.put("producer.type", "sync");
+
         // This property instructs the Kafka broker to send an acknowledgment to the producer when a message is received.
         // By default, the producer works in the "fire and forget" mode and is not informed in case of message loss.
         props.put("request.required.acks", "1");
@@ -60,7 +65,7 @@ public class SimpleProducer {
         // Deprecated
         //KeyedMessage<Integer, String> data = new KeyedMessage<Integer, String>(topic, messageStr);
         // ProducerRecord<Integer, String> data = new ProducerRecord<>(topic, messageStr);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 101; i < 2000000; i++) {
             producer.send(new ProducerRecord<>("test3", Integer.toString(i), "hello from ma idea with SimplePartitioner " + i));
 
             /* 如果需要ack的反馈结果 可以在send的时候使用callback函数
