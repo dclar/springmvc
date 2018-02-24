@@ -50,7 +50,8 @@
         <org.dclar.html2excel>1.0-SNAPSHOT</org.dclar.html2excel>
         <org.dclar.excel2html>1.0-SNAPSHOT</org.dclar.excel2html>
         <org.dclar.nclogger>1.0-SNAPSHOT</org.dclar.nclogger>
-        <org.apache.storm>1.1.1</org.apache.storm>
+        <org.apache.storm>1.2.0</org.apache.storm>
+        <org.apache.storm-kafka>1.2.0</org.apache.storm-kafka>
 
         <org.apache.zookeeper>3.4.6</org.apache.zookeeper>
 
@@ -59,6 +60,8 @@
         <org.apache.httpcomponents>4.5.3</org.apache.httpcomponents>
 
         <org.apache.kafka>1.0.0</org.apache.kafka>
+
+        <com.google.guava>20.0</com.google.guava>
 
     </properties>
 
@@ -310,6 +313,20 @@
                 <artifactId>storm-core</artifactId>
                 <version>${org.apache.storm}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.storm/storm-kafka -->
+            <dependency>
+                <groupId>org.apache.storm</groupId>
+                <artifactId>storm-kafka</artifactId>
+                <version>${org.apache.storm-kafka}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.storm</groupId>
+                <artifactId>storm-kafka-client</artifactId>
+                <version>${org.apache.storm-kafka}</version>
+            </dependency>
+
+
+
 
             <!--##########################################################################-->
             <!--#                                                                        #-->
@@ -418,12 +435,27 @@
                 <artifactId>commons-fileupload</artifactId>
                 <version>${commons.fils.upload}</version>
             </dependency>
-
+            <!--###########################################################################-->
+            <!--#                                                                         #-->
+            <!--#   Http comp                                                             #-->
+            <!--#                                                                         #-->
+            <!--###########################################################################-->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${org.apache.httpcomponents}</version>
             </dependency>
+
+            <!--&lt;!&ndash;###########################################################################&ndash;&gt;-->
+            <!--&lt;!&ndash;#                                                                         #&ndash;&gt;-->
+            <!--&lt;!&ndash;#   Google guava                                                          #&ndash;&gt;-->
+            <!--&lt;!&ndash;#                                                                         #&ndash;&gt;-->
+            <!--&lt;!&ndash;###########################################################################&ndash;&gt;-->
+            <!--<dependency>-->
+                <!--<groupId>com.google.guava</groupId>-->
+                <!--<artifactId>guava</artifactId>-->
+                <!--<version>${com.google.guava}</version>-->
+            <!--</dependency>-->
 
         </dependencies>
     </dependencyManagement>
