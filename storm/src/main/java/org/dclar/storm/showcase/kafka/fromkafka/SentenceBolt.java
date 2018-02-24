@@ -19,6 +19,7 @@ public class SentenceBolt extends BaseBasicBolt {
 
     public void execute(Tuple input, BasicOutputCollector collector) {
         // Get the word from the tuple
+        // DefaultRecordTranslator中的values决定index的位置
         String word = input.getString(4);
 
 //        List<Object> list= input.getValues();
