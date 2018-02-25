@@ -19,6 +19,7 @@
         <module>zookeeper</module>
         <module>nclogger</module>
         <module>flume</module>
+        <module>activemq</module>
     </modules>
     <name>springmvc Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -62,6 +63,8 @@
         <org.apache.kafka>1.0.0</org.apache.kafka>
 
         <com.google.guava>20.0</com.google.guava>
+
+        <org.apache.activemq>5.15.3</org.apache.activemq>
 
     </properties>
 
@@ -388,6 +391,28 @@
                 <artifactId>zookeeper</artifactId>
                 <version>${org.apache.zookeeper}</version>
             </dependency>
+
+
+            <!--###########################################################################-->
+            <!--#                                                                         #-->
+            <!--#   ActiveMq                                                              #-->
+            <!--#                                                                         #-->
+            <!--###########################################################################-->
+            <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-broker</artifactId>
+                <version>${org.apache.activemq}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-kahadb-store -->
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-kahadb-store</artifactId>
+                <version>${org.apache.activemq}</version>
+            </dependency>
+
+
+
 
 
             <!--###########################################################################-->

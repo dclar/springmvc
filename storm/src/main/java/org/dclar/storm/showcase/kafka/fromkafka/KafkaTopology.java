@@ -30,14 +30,14 @@ public class KafkaTopology {
         try {
             // Wait for some time before exiting
             System.out.println("Waiting to consume from kafka");
-            Thread.sleep(60000);
+            //Thread.sleep(60000);
         } catch (Exception exception) {
             System.out.println("Thread interrupted exception : " + exception);
         }
         // kill the KafkaTopology
-        cluster.killTopology("KafkaToplogy");
+        //cluster.killTopology("KafkaToplogy");
         // shut down the storm test cluster
-        cluster.shutdown();
+        //cluster.shutdown();
 
     }
 }
