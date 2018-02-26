@@ -64,6 +64,11 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
 
@@ -178,6 +183,29 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
+        <!--###########################################################################-->
+        <!--#                                                                         #-->
+        <!--#   ActiveMq                                                              #-->
+        <!--#                                                                         #-->
+        <!--###########################################################################-->
+        <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.activemq</groupId>-->
+            <!--<artifactId>activemq-broker</artifactId>-->
+            <!--<version>${org.apache.activemq}</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.apache.activemq/activemq-kahadb-store &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.activemq</groupId>-->
+            <!--<artifactId>activemq-kahadb-store</artifactId>-->
+            <!--<version>${org.apache.activemq}</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+            <version>${org.apache.activemq}</version>
         </dependency>
 
     </dependencies>

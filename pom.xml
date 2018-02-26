@@ -170,6 +170,12 @@
                 <version>${spring.framework.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+                <version>${spring.framework.version}</version>
+            </dependency>
+
             <!--模版引擎-->
             <!--<dependency>-->
             <!--<groupId>org.thymeleaf</groupId>-->
@@ -408,6 +414,11 @@
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-kahadb-store</artifactId>
+                <version>${org.apache.activemq}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-pool</artifactId>
                 <version>${org.apache.activemq}</version>
             </dependency>
 

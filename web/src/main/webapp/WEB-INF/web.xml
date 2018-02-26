@@ -10,7 +10,7 @@
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:springmvc/applicationContext.xml,classpath*:org/dclar/shiro/spring-shiro.xml</param-value>
+    <param-value>classpath*:springmvc/applicationContext.xml,classpath*:org/dclar/shiro/spring-shiro.xml,classpath*:activemq/activemq.xml</param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
