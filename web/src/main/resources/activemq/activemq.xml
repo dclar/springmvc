@@ -10,6 +10,7 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <!--启动broker的factory-->
     <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
         <property name="connectionFactory">
             <bean class="org.apache.activemq.ActiveMQConnectionFactory">
@@ -21,11 +22,19 @@
         <property name="maxConnections" value="100"/>
     </bean>
 
+    <!--使用队列时的注册方式-->
     <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
         <!--可以修改的队列名称-->
         <constructor-arg index="0" value="spring-queue"/>
     </bean>
 
+    <!--使用topic时的注册方式-->
+    <bean id="destinationTopic" class="org.apache.activemq.command.ActiveMQTopic">
+        <!--可以修改topic名称-->
+        <constructor-arg index="0" value="spring-topic"/>
+    </bean>
+
+    <!--操作template 类似于redis的template 负责从开启到close的所有操作 用户实现其中的send以及receive即可-->
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory" ref="jmsFactory"/>
         <property name="defaultDestination" ref="destination"/>
@@ -33,5 +42,15 @@
             <bean class="org.springframework.jms.support.converter.SimpleMessageConverter"/>
         </property>
     </bean>
+
+    <bean id="messageListener" class="org.dclar.controller.c06activemq.listener.Mylistener"/>
+    <!--采用监听器的方式取得数据-->
+    <!--采用DefaultMessageListenerContainer允许异步接收消息并缓存session和消息consumer,并且可以根据消息数量动态增加or减少监听器数量-->
+    <bean id="jmsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory"/>
+        <property name="destination" ref="destinationTopic"/>
+        <property name="messageListener" ref="messageListener"/>
+    </bean>
+
 
 </beans>
