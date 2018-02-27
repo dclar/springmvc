@@ -20,6 +20,8 @@
         <module>nclogger</module>
         <module>flume</module>
         <module>activemq</module>
+        <module>dubboprovider</module>
+        <module>dubboservice</module>
     </modules>
     <name>springmvc Maven Webapp</name>
     <url>http://maven.apache.org</url>
@@ -65,6 +67,9 @@
         <com.google.guava>20.0</com.google.guava>
 
         <org.apache.activemq>5.15.3</org.apache.activemq>
+
+        <dubbo>2.6.0</dubbo>
+        <com.101tec.zkclient>0.10</com.101tec.zkclient>
 
     </properties>
 
@@ -335,8 +340,6 @@
             </dependency>
 
 
-
-
             <!--##########################################################################-->
             <!--#                                                                        #-->
             <!--#   Flume                                                                #-->
@@ -383,9 +386,6 @@
             </dependency>
 
 
-
-
-
             <!--##########################################################################-->
             <!--#                                                                        #-->
             <!--#   Zookeeper                                                            #-->
@@ -396,6 +396,12 @@
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
                 <version>${org.apache.zookeeper}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.101tec/zkclient -->
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>${com.101tec.zkclient}</version>
             </dependency>
 
 
@@ -421,9 +427,6 @@
                 <artifactId>activemq-pool</artifactId>
                 <version>${org.apache.activemq}</version>
             </dependency>
-
-
-
 
 
             <!--###########################################################################-->
@@ -482,15 +485,28 @@
                 <version>${org.apache.httpcomponents}</version>
             </dependency>
 
+            <!--###########################################################################-->
+            <!--#                                                                         #-->
+            <!--#   Dubbo                                                                 #-->
+            <!--#                                                                         #-->
+            <!--###########################################################################-->
+            <!-- https://mvnrepository.com/artifact/com.alibaba/dubbo -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo}</version>
+            </dependency>
+
+
             <!--&lt;!&ndash;###########################################################################&ndash;&gt;-->
             <!--&lt;!&ndash;#                                                                         #&ndash;&gt;-->
             <!--&lt;!&ndash;#   Google guava                                                          #&ndash;&gt;-->
             <!--&lt;!&ndash;#                                                                         #&ndash;&gt;-->
             <!--&lt;!&ndash;###########################################################################&ndash;&gt;-->
             <!--<dependency>-->
-                <!--<groupId>com.google.guava</groupId>-->
-                <!--<artifactId>guava</artifactId>-->
-                <!--<version>${com.google.guava}</version>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava</artifactId>-->
+            <!--<version>${com.google.guava}</version>-->
             <!--</dependency>-->
 
         </dependencies>

@@ -12,7 +12,7 @@ import javax.jms.TextMessage;
 @RequestMapping("/activemq")
 public class ActiveMQController {
 
-    @Autowired
+    //@Autowired
     private JmsTemplate jt;
 
     @RequestMapping(value = "/queue/send")

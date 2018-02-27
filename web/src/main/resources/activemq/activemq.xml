@@ -15,6 +15,7 @@
         <property name="connectionFactory">
             <bean class="org.apache.activemq.ActiveMQConnectionFactory">
                 <property name="brokerURL">
+                    <!--broker需要提前启动服务 $ bin/activemq start-->
                     <value>tcp://192.168.1.164:61616</value>
                 </property>
             </bean>

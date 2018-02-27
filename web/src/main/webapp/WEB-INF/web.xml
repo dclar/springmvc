@@ -10,7 +10,13 @@
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:springmvc/applicationContext.xml,classpath*:org/dclar/shiro/spring-shiro.xml,classpath*:activemq/activemq.xml</param-value>
+    <param-value>
+      classpath*:springmvc/applicationContext.xml,
+      classpath*:org/dclar/shiro/spring-shiro.xml,
+      <!--需要使用amq的时候再打开否则会启动线程一直ping操作-->
+      <!--classpath*:activemq/activemq.xml,-->
+      classpath*:dubbo/applicationContext-dubbo-consumer.xml
+    </param-value>
   </context-param>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
