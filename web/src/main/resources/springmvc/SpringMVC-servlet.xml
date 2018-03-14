@@ -24,6 +24,7 @@
     <context:component-scan base-package="org.dclar.controller*.*"/>
 
     <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/img/**" location="/img/"/>
 
 
     <!-- **************************************************************** -->

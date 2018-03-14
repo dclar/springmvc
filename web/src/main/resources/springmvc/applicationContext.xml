@@ -11,8 +11,17 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- 启用注解 -->
+    <!--
+    前面的context部分需要namespace的handler进行解析,后面的annotation-config则需要parser进行解析
+    这里进行annotation-config的注解定义即告诉spring要注册一个Configuration的processor,并且在PostProcessorRegistrationDelegate.java
+    中要进行最优先的执行
+    -->
     <context:annotation-config/>
     <!-- 启动组件扫描，排除@Controller组件，该组件由SpringMVC配置文件扫描 -->
+    <!--
+    这里的scan的注解同上, scan其实就是扫描指定位置把bean的信息加入到BeanDefinitionHolder.java中,为了后面的bean的实例化作准备
+    可以设置不扫描的部分,比如带有Controller注解的class
+    -->
     <context:component-scan base-package="org.dclar.*service*">
         <context:exclude-filter type="annotation"
                                 expression="org.springframework.stereotype.Controller"/>
@@ -23,6 +32,11 @@
     <context:component-scan base-package="org.dclar.e2h*.*"/>
 
     <!-- 加载配置属性文件 系统性配置 -->
+    <!--
+    PropertiesFactoryBean的加载其实是依赖于PropertyPlaceholderConfigurer的提前加载, 由于PropertyPlaceholderConfigurer的 BeanFactoryPostProcessor接口属性
+    需要提前加载,而本身又依赖于PropertiesFactoryBean,故PropertiesFactoryBean需要在PropertyPlaceholderConfigurer加载的时候作为reference进行实例化.
+    并且在加载完毕后,执行bean的afterPropertiesSet方法而初始化这里定义的所有的properties文件
+    -->
     <bean id="configProperties"
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
@@ -32,6 +46,18 @@
             </list>
         </property>
     </bean>
+
+
+    <!--
+
+    这里PropertyPlaceholderConfigurer是实现了接口 BeanFactoryPostProcessor的class
+    并且具有最高的PriorityOrdered 执行权限, 所以在 PostProcessorRegistrationDelegate.java中执行的时候会最优先的进行
+    postProcessBeanFactory方法的调用,从而进行properties的合并等操作具体参看PropertyPlaceholderConfigurer的继承类
+    PropertyResourceConfigurer.java的postProcessBeanFactory的方法
+
+    ps, 在PropertyPlaceholderConfigurer 实例化之前应该先实例化其依赖类PropertiesFactoryBean.java 具体调查
+    PostProcessorRegistrationDelegate.java的调用 看是否对其进行了实例化
+    -->
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="properties" ref="configProperties"/>

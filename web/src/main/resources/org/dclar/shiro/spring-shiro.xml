@@ -23,6 +23,7 @@
         <property name="filterChainDefinitions">
             <value>
                 # some example chain definitions:
+                /img/** = anon
                 /log/**    = anon
                 /signin/** = anon
                 /download/** = anon
